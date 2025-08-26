@@ -1,8 +1,5 @@
 import Paper from "../models/Paper.js";
 
-// @desc Get papers by course/branch/year/subject
-// @route GET /api/papers
-
 export const getPapers = async (req, res) => {
   const { course, branch, year, subject } = req.query;
 
@@ -16,9 +13,6 @@ export const getPapers = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// @desc Add a new paper entry
-// @route POST /api/papers
 
 export const addPaper = async (req, res) => {
   const { course, branch, year, subject, papers } = req.body;

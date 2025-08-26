@@ -3,11 +3,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Paper = require("./models/Paper");
-// const {connectDB} = require('./config/db.js')
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +25,7 @@ app.post("/api/papers", async (req, res) => {
   }
 });
 
-// Get All Courses
+//All Courses
 app.get("/api/courses", async (req, res) => {
   try {
     const courses = await Paper.distinct("course");
@@ -37,7 +35,7 @@ app.get("/api/courses", async (req, res) => {
   }
 });
 
-// Get Branches for a Course
+//Branches for a Course
 app.get("/api/branches/:course", async (req, res) => {
   try {
     const { course } = req.params;
@@ -48,7 +46,7 @@ app.get("/api/branches/:course", async (req, res) => {
   }
 });
 
-// Get Years for Course + Branch
+//Years for Course + Branch
 app.get("/api/years/:course/:branch", async (req, res) => {
   try {
     const { course, branch } = req.params;
@@ -59,7 +57,7 @@ app.get("/api/years/:course/:branch", async (req, res) => {
   }
 });
 
-// Get Subjects for Course + Branch + Year
+//Subjects for Course + Branch + Year
 app.get("/api/subjects/:course/:branch/:year", async (req, res) => {
   try {
     const { course, branch, year } = req.params;
@@ -70,7 +68,7 @@ app.get("/api/subjects/:course/:branch/:year", async (req, res) => {
   }
 });
 
-// Get Papers for a Subject
+//Papers for a Subject
 app.get("/api/papers/:course/:branch/:year/:subject", async (req, res) => {
   try {
     const { course, branch, year, subject } = req.params;
@@ -80,12 +78,6 @@ app.get("/api/papers/:course/:branch/:year/:subject", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// DB connection
-// connectDB();
-
-// Routes
-// app.use("/api/papers", paperRoutes);
 
 const PORT = process.env.PORT || 6969;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -15,7 +15,6 @@ const paperSchema = new mongoose.Schema(
   },
 );
 
-// Prevent OverwriteModelError
 const Paper = mongoose.models.Paper || mongoose.model("Paper", paperSchema);
 
 module.exports = Paper;
