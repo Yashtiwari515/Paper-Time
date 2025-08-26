@@ -14,14 +14,13 @@ function PaperSelector() {
   const [subjects, setSubjects] = useState([]);
   const [papers, setPapers] = useState([]);
 
-  const API = "http://localhost:6969/api"; // apna backend URL daal
-
-  // 🔹 Get All Courses on Page Load
+  const API = "http://localhost:6969/api"; 
+  //All Courses on Page Load
   useEffect(() => {
     axios.get(`${API}/courses`).then((res) => setCourses(res.data));
   }, []);
 
-  // 🔹 When Course Selected → Load Branches
+  //Course Selected → Load Branches
   useEffect(() => {
     if (course) {
       axios.get(`${API}/branches/${course}`).then((res) => setBranches(res.data));
@@ -36,7 +35,7 @@ function PaperSelector() {
     setPapers([]);
   }, [course]);
 
-  // 🔹 When Branch Selected → Load Years
+  //Branch Selected → Load Years
   useEffect(() => {
     if (course && branch) {
       axios
@@ -51,7 +50,7 @@ function PaperSelector() {
     setPapers([]);
   }, [branch]);
 
-  // 🔹 When Year Selected → Load Subjects
+  //Year Selected → Load Subjects
   useEffect(() => {
     if (course && branch && year) {
       axios
@@ -64,7 +63,7 @@ function PaperSelector() {
     setPapers([]);
   }, [year]);
 
-  // 🔹 When Subject Selected → Load Papers
+  //Subject Selected → Load Papers
   useEffect(() => {
     if (course && branch && year && subject) {
       axios
