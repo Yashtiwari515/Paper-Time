@@ -6,6 +6,12 @@ const Paper = require("./models/Paper");
 
 const app = express();
 
+app.use((req, res, next) => {
+  console.log("🌍 Request Origin:", req.headers.origin);
+  next();
+});
+
+
 const allowedOrigins = [
   "http://localhost:5173",                // local Vite dev
   "https://paper-time-preparation.vercel.app"      // deployed frontend
