@@ -79,5 +79,10 @@ app.get("/api/papers/:course/:branch/:year/:subject", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 6969;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//for localhost
+// const PORT = process.env.PORT || 6969;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+//for vercel
+module.exports = app;
