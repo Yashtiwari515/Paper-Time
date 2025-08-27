@@ -14,7 +14,7 @@ function PaperSelector() {
   const [subjects, setSubjects] = useState([]);
   const [papers, setPapers] = useState([]);
 
-  const API = "http://localhost:6969/api"; 
+  const API = import.meta.env.VITE_API_URL;
 
   //All Courses on Page Load
   useEffect(() => {
