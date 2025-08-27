@@ -6,10 +6,10 @@ const Paper = require("./models/Paper");
 
 const app = express();
 
-app.use((req, res, next) => {
-  console.log("🌍 Request Origin:", req.headers.origin);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("🌍 Request Origin:", req.headers.origin);
+//   next();
+// });
 
 
 const allowedOrigins = [
