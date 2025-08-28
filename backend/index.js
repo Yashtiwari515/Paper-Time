@@ -3,14 +3,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Paper = require("./models/Paper");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const app = express();
-
-// app.use((req, res, next) => {
-//   console.log("🌍 Request Origin:", req.headers.origin);
-//   next();
-// });
-
 
 const allowedOrigins = [
   "http://localhost:5173",                // local Vite dev
@@ -99,7 +94,64 @@ app.get("/api/papers/:course/:branch/:year/:subject", async (req, res) => {
   }
 });
 
-//for localhost
+
+//chat bot setup
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Chatbot endpoint
+app.post("/api/chatbot", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    // Use Gemini model
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const result = await model.generateContent(
+      `Extract course, branch, year, subject from this user query:
+       "${message}"
+       Respond ONLY in JSON like:
+       { "course": "...", "branch": "...", "year": "...", "subject": "..." }`
+    );
+
+    let text = result.response.text();
+
+    // 🧹 Clean Gemini response (remove ```json ... ```)
+    if (text.startsWith("```")) {
+      text = text.replace(/```json|```/g, "").trim();
+    }
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error("❌ JSON parse failed. Raw text:", text);
+      return res.status(500).json({ error: "Invalid response format from AI." });
+    }
+
+    const { course, branch, year, subject } = data;
+
+    // Query MongoDB
+    const paper = await Paper.findOne({ course, branch, year, subject });
+
+    if (!paper || !paper.papers || paper.papers.length === 0) {
+      return res.json({
+        reply: `Sorry, I couldn’t find a paper for ${course}, ${branch}, ${year}, ${subject}.`
+      });
+    }
+
+    res.json({
+      reply: `Here are the papers for ${subject}:`,
+      papers: paper.papers
+    });
+
+  } catch (err) {
+    console.error("❌ Chatbot Error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// for localhost
 // const PORT = process.env.PORT || 6969;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
