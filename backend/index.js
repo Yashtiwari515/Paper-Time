@@ -9,7 +9,8 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",                // local Vite dev
-  "https://paper-time-preparation.vercel.app"      // deployed frontend
+  "https://paper-time-preparation.vercel.app",      // deployed frontend
+  "https://paper-time.vercel.app"
 ];
 
 app.use(cors({
