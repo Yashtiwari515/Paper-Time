@@ -135,8 +135,12 @@ app.post("/api/chatbot", async (req, res) => {
     const paper = await Paper.findOne({ course, branch, year, subject });
 
     if (!paper || !paper.papers || paper.papers.length === 0) {
+      // return res.json({
+      //   reply: `Sorry, I couldn’t find a paper for ${course}, ${branch}, ${year}, ${subject}.`
+      // });
+      const aiAnswer = await model.generateContent(message);
       return res.json({
-        reply: `Sorry, I couldn’t find a paper for ${course}, ${branch}, ${year}, ${subject}.`
+        reply: aiAnswer.response.text()
       });
     }
 
