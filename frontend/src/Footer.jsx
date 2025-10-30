@@ -23,6 +23,9 @@ function Footer() {
             <p className="footer-copy">
               © {new Date().getFullYear()} PaperTime. All rights reserved.
             </p>
+            <p className="footer-own">
+              Made by Yash Tiwari 😎
+            </p>
           </div>
         </footer>
       </div>

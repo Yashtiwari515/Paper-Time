@@ -41,6 +41,11 @@ body {
 
 .footer-copy {
   margin-top: 1rem;
-  font-size: 0.85rem;
   color: #474747;
+  font-size: 0.85rem;
+}
+.footer-own{
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: grey;
 }
