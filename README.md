@@ -70,12 +70,15 @@ Currently, the portal contains **Computer Science & Engineering (CSE)** papers, 
    git clone https://github.com/Yashtiwari515/Paper-Time.git
 
 2. Navigate into the project folder:
+   ```bash
    cd question-papers-portal
 
 3. Install dependencies:
+   ```bash
    npm install
 
 4. Start the development server:
+   ```bash
    npm run dev
 
 
