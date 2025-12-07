@@ -8,20 +8,24 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173",                // local Vite dev
-  "https://paper-time-preparation.vercel.app",      // deployed frontend
-  "https://paper-time.vercel.app"
+  "http://localhost:5173",
+  "https://paper-time-preparation.vercel.app"
 ];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  }
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.some(url => origin.startsWith(url))) {
+        return callback(null, true);
+      }
+
+      console.log("❌ BLOCKED ORIGIN:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
