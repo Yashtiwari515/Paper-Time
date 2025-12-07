@@ -157,9 +157,5 @@ app.post("/api/chatbot", async (req, res) => {
 
 
 // for localhost
-// const PORT = process.env.PORT || 6969;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-//for vercel
-module.exports = app;
+const PORT = process.env.PORT || 6969;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
