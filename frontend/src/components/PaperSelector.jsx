@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FiBookOpen, FiFolder, FiSearch, FiDownload } from "react-icons/fi";
 import "./PaperSelector.css";
 
 function PaperSelector() {
@@ -16,15 +17,15 @@ function PaperSelector() {
 
   const API = import.meta.env.VITE_API_URL;
 
-  //All Courses on Page Load
   useEffect(() => {
     axios.get(`${API}/courses`).then((res) => setCourses(res.data));
   }, []);
 
-  //Course Selected → Load Branches
   useEffect(() => {
     if (course) {
-      axios.get(`${API}/branches/${course}`).then((res) => setBranches(res.data));
+      axios
+        .get(`${API}/branches/${course}`)
+        .then((res) => setBranches(res.data));
     } else {
       setBranches([]);
     }
@@ -36,7 +37,6 @@ function PaperSelector() {
     setPapers([]);
   }, [course]);
 
-  //Branch Selected → Load Years
   useEffect(() => {
     if (course && branch) {
       axios
@@ -51,7 +51,6 @@ function PaperSelector() {
     setPapers([]);
   }, [branch]);
 
-  //Year Selected → Load Subjects
   useEffect(() => {
     if (course && branch && year) {
       axios
@@ -64,7 +63,6 @@ function PaperSelector() {
     setPapers([]);
   }, [year]);
 
-  //Subject Selected → Load Papers
   useEffect(() => {
     if (course && branch && year && subject) {
       axios
@@ -75,94 +73,90 @@ function PaperSelector() {
     }
   }, [subject]);
 
-  return (
-    <div className="paper-container">
-      <h2 className="paper-title">📘 Download Previous Year Papers</h2>
+ return (
+  <div className="paper-wrapper">
 
-      {/* Course Dropdown */}
-      <div className="paper-field">
-        <label>Select Course:</label>
-        <select
-          value={course}
-          onChange={(e) => setCourse(e.target.value)}
-        >
-          <option value="">-- Select Course --</option>
-          {courses.map((c, i) => (
-            <option key={i} value={c}>{c}</option>
-          ))}
-        </select>
+      <div className="selector-card">
+
+        <h1 className="selector-heading">
+          <FiBookOpen size={32} /> Previous Year Papers
+        </h1>
+
+        <div className="input-group">
+          <label><FiFolder /> Select Course</label>
+          <select value={course} onChange={(e) => setCourse(e.target.value)}>
+            <option value="">-- Choose Course --</option>
+            {courses.map((c, i) => (
+              <option key={i} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* BRANCH */}
+        {course && (
+          <div className="input-group fade-in">
+            <label><FiFolder /> Select Branch</label>
+            <select value={branch} onChange={(e) => setBranch(e.target.value)}>
+              <option value="">-- Choose Branch --</option>
+              {branches.map((b, i) => (
+                <option key={i} value={b}>{b}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* YEAR */}
+        {branch && (
+          <div className="input-group fade-in">
+            <label><FiSearch /> Select Year</label>
+            <select value={year} onChange={(e) => setYear(e.target.value)}>
+              <option value="">-- Choose Year --</option>
+              {years.map((y, i) => (
+                <option key={i} value={y}>{y}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* SUBJECT */}
+        {year && (
+          <div className="input-group fade-in">
+            <label><FiSearch /> Select Subject</label>
+            <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+              <option value="">-- Choose Subject --</option>
+              {subjects.map((s, i) => (
+                <option key={i} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* PAPERS LIST */}
+        {subject && papers.length > 0 && (
+          <div className="paper-list fade-pop">
+            <h3>{subject} Papers</h3>
+            <ul>
+              {papers.map((p, i) => (
+                <li key={i}>
+                  <a href={p.link} download>
+                    <FiDownload /> {p.year} Paper
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* NO PAPERS */}
+        {subject && papers.length === 0 && (
+          <p className="no-papers fade-pop">No Papers Found 😕</p>
+        )}
+
       </div>
 
-      {/* Branch Dropdown */}
-      {course && (
-        <div className="paper-field">
-          <label>Select Branch:</label>
-          <select
-            value={branch}
-            onChange={(e) => setBranch(e.target.value)}
-          >
-            <option value="">-- Select Branch --</option>
-            {branches.map((b, i) => (
-              <option key={i} value={b}>{b}</option>
-            ))}
-          </select>
-        </div>
-      )}
+  </div>
+);
 
-      {/* Year Dropdown */}
-      {branch && (
-        <div className="paper-field">
-          <label>Select Year:</label>
-          <select
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-          >
-            <option value="">-- Select Year --</option>
-            {years.map((y, i) => (
-              <option key={i} value={y}>{y}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* Subject Dropdown */}
-      {year && (
-        <div className="paper-field">
-          <label>Select Subject:</label>
-          <select
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          >
-            <option value="">-- Select Subject --</option>
-            {subjects.map((s, i) => (
-              <option key={i} value={s}>{s}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* Papers List */}
-      {subject && papers.length > 0 && (
-        <div className="paper-list">
-          <h3>{subject} Papers</h3>
-          <ul>
-            {papers.map((p, index) => (
-              <li key={index}>
-                <a href={p.link} download>
-                  {p.year} Paper ⬇️
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* If No Papers Found */}
-      {subject && papers.length === 0 && (
-        <p className="no-papers">❌ No Papers Found</p>
-      )}
-    </div>
-  );
 }
 
 export default PaperSelector;

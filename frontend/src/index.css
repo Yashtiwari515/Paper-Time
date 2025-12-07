@@ -1,6 +1,16 @@
-body {
-  background-color: rgb(249, 229, 167);
+.nav-logo {
+  width: 150px;   
+  height: auto;
+  margin-top: 1.5rem;
 }
+
+@media (max-width: 600px) {
+  .nav-logo {
+    width: 150px !important;   
+    margin-top: 1rem;
+  }
+}
+
 .footer {
   color: black;
   padding: 2rem 1rem;

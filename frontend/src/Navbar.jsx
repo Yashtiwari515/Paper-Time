@@ -3,9 +3,8 @@ function Navbar() {
   return (
     <div className='container'>
         <div className='row'>
-            <img src="images\logo.png" alt="Logo" style={{ width: "20%" }} />
+            <img src="images/newbg.png" alt="Logo" className="nav-logo" />
         </div>
-        <hr style={{color: "#474747", marginBottom:"5rem",marginTop:"0"}} />
     </div>
   );
 }
