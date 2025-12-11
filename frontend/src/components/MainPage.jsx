@@ -17,7 +17,7 @@ function MainPage() {
                 </div>
             </div>
 
-            <ChatbotWidget />
+            {/* <ChatbotWidget /> */}
         </>
     );
 }
