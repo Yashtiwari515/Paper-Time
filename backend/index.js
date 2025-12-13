@@ -1,10 +1,13 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const Paper = require("./models/Paper");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import Paper from "./models/Paper.js";
 import paperRoutes from "./routes/paperRoutes.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 
 const app = express();
 
