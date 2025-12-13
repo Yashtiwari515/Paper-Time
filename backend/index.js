@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const Paper = require("./models/Paper");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+import paperRoutes from "./routes/paperRoutes.js";
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(
         return callback(null, true);
       }
 
-      console.log("❌ BLOCKED ORIGIN:", origin);
+      console.log(" BLOCKED ORIGIN:", origin);
       return callback(new Error("Not allowed by CORS"));
     },
   })
@@ -32,18 +33,21 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose
   .connect(process.env.MONGO_URL)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB Error:", err));
+  .then(() => console.log(" MongoDB Connected"))
+  .catch((err) => console.error(" MongoDB Error:", err));
 
-app.post("/api/papers", async (req, res) => {
-  try {
-    const paper = new Paper(req.body);
-    await paper.save();
-    res.status(201).json(paper);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// app.post("/api/papers", async (req, res) => {
+//   try {
+//     const paper = new Paper(req.body);
+//     await paper.save();
+//     res.status(201).json(paper);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+app.use("/api/papers", paperRoutes);
+
 
 //All Courses
 app.get("/api/courses", async (req, res) => {
@@ -129,7 +133,7 @@ app.post("/api/chatbot", async (req, res) => {
     try {
       data = JSON.parse(text);
     } catch (e) {
-      console.error("❌ JSON parse failed. Raw text:", text);
+      console.error(" JSON parse failed. Raw text:", text);
       return res.status(500).json({ error: "Invalid response format from AI." });
     }
 
@@ -154,7 +158,7 @@ app.post("/api/chatbot", async (req, res) => {
     });
 
   } catch (err) {
-    console.error("❌ Chatbot Error:", err);
+    console.error(" Chatbot Error:", err);
     res.status(500).json({ error: err.message });
   }
 });

@@ -25,3 +25,23 @@ export const addPaper = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const appendPaper = async (req, res) => {
+  const { course, branch, year, subject, paper } = req.body;
+
+  try {
+    const updatedPaper = await Paper.findOneAndUpdate(
+      { course, branch, year, subject },
+      { $push: { papers: paper } },
+      { new: true }
+    );
+
+    if (!updatedPaper) {
+      return res.status(404).json({ message: "Subject not found" });
+    }
+
+    res.json(updatedPaper);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

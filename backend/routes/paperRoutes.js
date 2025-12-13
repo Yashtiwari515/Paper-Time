@@ -1,9 +1,10 @@
 import express from "express";
-import { getPapers, addPaper } from "../controllers/paperController.js";
+import { getPapers, addPaper, appendPaper } from "../controllers/paperController.js";
 
 const router = express.Router();
 
-router.get("/", getPapers);   // GET papers
-router.post("/", addPaper);   // Add new papers
+router.get("/", getPapers);
+router.post("/", addPaper);          // create new subject
+router.put("/add-paper", appendPaper); // add paper to existing subject
 
 export default router;
