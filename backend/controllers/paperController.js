@@ -27,21 +27,47 @@ export const addPaper = async (req, res) => {
 };
 
 export const appendPaper = async (req, res) => {
-  const { course, branch, year, subject, paper } = req.body;
+  const { course, branch, year, subject, papers } = req.body;
 
   try {
-    const updatedPaper = await Paper.findOneAndUpdate(
-      { course, branch, year, subject },
-      { $push: { papers: paper } },
-      { new: true }
-    );
+    const existingPaper = await Paper.findOne({
+      course,
+      branch,
+      year,
+      subject,
+    });
 
-    if (!updatedPaper) {
-      return res.status(404).json({ message: "Subject not found" });
+    if (!existingPaper) {
+      return res.status(404).json({
+        message: "Subject not found",
+      });
     }
 
-    res.json(updatedPaper);
+    // Existing years ko Set me store karo
+    const existingYears = new Set(existingPaper.papers.map((p) => p.year));
+
+    // Sirf naye years wale papers rakho
+    const newPapers = papers.filter((paper) => !existingYears.has(paper.year));
+
+    if (newPapers.length === 0) {
+      return res.status(400).json({
+        message: "All provided papers already exist",
+      });
+    }
+
+    // New papers append karo
+    existingPaper.papers.push(...newPapers);
+
+    const updatedPaper = await existingPaper.save();
+
+    res.json({
+      message: `${newPapers.length} paper(s) added successfully`,
+      added: newPapers,
+      papers: updatedPaper.papers,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };

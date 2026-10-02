@@ -1,0 +1,3 @@
+# Ignore nested gitignore files
+backend/.gitignore
+frontend/.gitignore
